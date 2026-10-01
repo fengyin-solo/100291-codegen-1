@@ -28,6 +28,26 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class RegulationPayload(BaseModel):
+    """法规条款登记入参。"""
+
+    regulation_code: str
+    regulation_name: str
+    version: str
+    device_category: str
+    effective_date: str
+    publish_date: str | None = None
+    announcement_no: str | None = None
+    remark: str | None = None
+
+
+class RegulationActionPayload(BaseModel):
+    """法规条款启用或废止动作。"""
+
+    action: str
+    remark: str | None = None
+
+
 
 class RegisterEntry(BaseModel):
     """设备登记明细结构。"""

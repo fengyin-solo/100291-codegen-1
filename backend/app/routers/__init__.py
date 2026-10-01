@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from app.routers import register as router_register
+from app.routers import regulation as router_regulation
 from app.routers import boiler as router_boiler
 from app.routers import pressurevessel as router_pressurevessel
 from app.routers import pipeline as router_pipeline
@@ -27,4 +28,4 @@ from app.routers import energyeff as router_energyeff
 from app.routers import archive as router_archive
 from app.routers import contract as router_contract
 
-ROUTERS = [router_register, router_boiler, router_pressurevessel, router_pipeline, router_elevator, router_crane, router_forklift, router_inspection, router_maintenance, router_hazard, router_accident, router_operator, router_training, router_safetyvalve, router_gauge, router_sparepart, router_emergency, router_energyeff, router_archive, router_contract]
+ROUTERS = [router_register, router_regulation, router_boiler, router_pressurevessel, router_pipeline, router_elevator, router_crane, router_forklift, router_inspection, router_maintenance, router_hazard, router_accident, router_operator, router_training, router_safetyvalve, router_gauge, router_sparepart, router_emergency, router_energyeff, router_archive, router_contract]

@@ -70,7 +70,7 @@ import { request } from '@/api/client'
 type Row = Record<string, string | number | null>
 
 const ENDPOINT = '/api/register'
-const columns = ["设备编号", "设备名称", "设备种类", "使用单位", "安装地点", "投用日期", "登记证号", "登记状态"]
+const columns = ["设备编号", "设备名称", "设备种类", "使用单位", "安装地点", "投用日期", "登记证号", "当前适用法规", "冲突条款", "登记状态"]
 const actions = ["办理登记", "申请停用", "申请注销"]
 const statuses = ["待登记", "已登记", "停用中", "已注销"]
 const stats = [{"label": "待登记设备", "value": 0}, {"label": "已登记设备", "value": 0}, {"label": "停用设备", "value": 0}]

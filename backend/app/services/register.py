@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.store import store
+from app.services.regulation import regulation_service
 
 MODULE = "register"
 REQUIRED_FIELDS = ["设备编号", "设备名称", "设备种类"]
@@ -21,6 +22,7 @@ class RegisterService:
         page: int = 1,
         size: int = 20,
     ) -> tuple[list[dict[str, Any]], int]:
+        regulation_service.ensure_initialized()
         rows = store.rows(MODULE)
         if keyword:
             rows = [row for row in rows if keyword in str(row.get("设备编号", ""))]
@@ -31,6 +33,7 @@ class RegisterService:
         return rows[start:start + size], total
 
     def get_entry(self, entry_id: int) -> dict[str, Any] | None:
+        regulation_service.ensure_initialized()
         return store.find(MODULE, entry_id)
 
     def create_entry(self, values: dict[str, Any]) -> tuple[dict[str, Any] | None, list[str]]:
@@ -43,7 +46,15 @@ class RegisterService:
         entry["status"] = STATUS_ORDER[0]
         entry["pending"] = True
         entry["abnormal"] = False
+        regulation_service.ensure_initialized()
         rows.append(entry)
+        regulation_service.recalculate_device(
+            entry,
+            reason="新增设备登记",
+            operator="register-service",
+            remark="新增设备后按当前条款匹配",
+        )
+        entry["_regulation_bootstrapped"] = True
         return entry, []
 
     def run_action(self, entry_id: int, action: str) -> tuple[dict[str, Any] | None, str]:
@@ -58,4 +69,11 @@ class RegisterService:
         entry["status"] = target
         entry["pending"] = target != STATUS_ORDER[-1]
         entry["abnormal"] = action in NEGATIVE_ACTIONS
+        if action == "办理登记":
+            regulation_service.recalculate_device(
+                entry,
+                reason="设备办理登记",
+                operator="register-service",
+                remark="登记动作确认后固化当前条款匹配",
+            )
         return entry, f"设备登记已{action}"

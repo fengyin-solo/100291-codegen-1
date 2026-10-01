@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Dashboard from '@/views/Dashboard.vue'
 const Register = () => import('@/views/register/index.vue')
+const Regulation = () => import('@/views/regulation/index.vue')
 const Boiler = () => import('@/views/boiler/index.vue')
 const Pressurevessel = () => import('@/views/pressurevessel/index.vue')
 const Pipeline = () => import('@/views/pipeline/index.vue')
@@ -26,6 +27,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'dashboard', component: Dashboard },
+    { path: '/regulation', name: 'regulation', component: Regulation },
     { path: '/register', name: 'register', component: Register },
     { path: '/boiler', name: 'boiler', component: Boiler },
     { path: '/pressurevessel', name: 'pressurevessel', component: Pressurevessel },
