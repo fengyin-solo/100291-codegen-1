@@ -268,3 +268,35 @@ class ContractEntry(BaseModel):
     field_5: str | None = None  # 到期日期
     field_6: str | None = None  # 是否续签
     field_7: str | None = None  # 合同状态
+
+
+class RegulationCreate(BaseModel):
+    """登记一份法规标准。"""
+
+    code: str
+    name: str
+    owner_dept: str
+
+
+class ClauseVersionCreate(BaseModel):
+    """为法规登记一版条款（登记后一律为征求意见）。"""
+
+    version: str
+    title: str = ""
+    categories: list[str] = Field(default_factory=list)
+    effective_date: str | None = None
+
+
+class ClauseAction(BaseModel):
+    """启用 / 废止条款时提交的操作账号与日期。"""
+
+    operator: str
+    date: str | None = None
+
+
+class EquipmentCreate(BaseModel):
+    """登记一台纳入法规适用范围的设备。"""
+
+    code: str
+    name: str
+    category: str

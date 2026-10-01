@@ -69,6 +69,7 @@ npm run dev
 | 能效监测 | `energyeff` | 能效记录 | 记录编号、设备类型、耗能量 |
 | 档案管理 | `archive` | 设备档案 | 档案编号、所属设备、档案类别 |
 | 维保合同 | `contract` | 维保合同 | 合同编号、签约单位、维保范围 |
+| 法规标准台账 | `regulation` | 法规条款 / 设备适用匹配 | 文号、条款版本、适用设备类别、生效日期、状态 |
 
 ## 约定
 
@@ -76,3 +77,27 @@ npm run dev
   `backend/app/routers/<模块>.py`，业务规则在 `backend/app/services/<模块>.py`。
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
+
+## 法规标准台账（`regulation`）
+
+把散在各份公告里的法规条款收成一份可匹配的台账，规则全部落在
+`backend/app/services/regulation.py`：
+
+- **登记口径**：每条法规按文号唯一，同文号或同文号下同一版本重复登记只认第一次；
+  条款按适用设备类别与生效日期登记，登记后一律是「征求意见」。
+- **状态机**：条款版本只能 `征求意见 → 已生效 → 已废止` 逐级流转，跳级当场驳回
+  （HTTP 409）。
+- **设备匹配**：设备按类别命中生效区间内的条款；同一法规两版同时命中时，生效日期
+  较晚的一版说了算，冲突结果里保留互相打架的两版（`/api/regulation/conflicts`）。
+- **重算与历史**：启用 / 废止条款后全部已登记设备自动重算适用清单并就地回填；
+  历史匹配只追加不改写，可用 `as_of` 按当时生效的那一版重放
+  （`GET /api/regulation/equipment/{id}?as_of=YYYY-MM-DD`）。
+- **权限**：只有该法规的归口部门账号、且持有 `法规条款:启用` / `法规条款:废止`
+  权限才能启用或废止；越权当场驳回（HTTP 403），回执点名缺的是哪项权限或部门不符。
+
+规则用例见 `backend/tests/test_regulation.py`，运行：
+
+```bash
+cd backend
+python3 -m unittest discover -s tests -v
+```

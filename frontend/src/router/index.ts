@@ -21,6 +21,7 @@ const Emergency = () => import('@/views/emergency/index.vue')
 const Energyeff = () => import('@/views/energyeff/index.vue')
 const Archive = () => import('@/views/archive/index.vue')
 const Contract = () => import('@/views/contract/index.vue')
+const Regulation = () => import('@/views/regulation/index.vue')
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,6 +47,7 @@ const router = createRouter({
     { path: '/energyeff', name: 'energyeff', component: Energyeff },
     { path: '/archive', name: 'archive', component: Archive },
     { path: '/contract', name: 'contract', component: Contract },
+    { path: '/regulation', name: 'regulation', component: Regulation },
   ],
 })
 
